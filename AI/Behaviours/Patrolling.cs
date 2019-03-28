@@ -10,6 +10,7 @@ public partial class AI
 
             public void Start()
             {
+                //Heres your fucking notes!
                 Debug.Log("Starting " + this.GetType() + " Behaviour");
             }
 
