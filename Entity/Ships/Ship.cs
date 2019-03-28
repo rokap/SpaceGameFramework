@@ -24,7 +24,6 @@ public class Ship : Entity, IShip
     // Use this for initialization
     void Start()
     {
-        ai.ChangeBehaviour(new AI.Behaviour.Test(this));
     }
 
     // Update is called once per frame
