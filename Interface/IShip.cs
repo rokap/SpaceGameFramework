@@ -4,5 +4,4 @@ using UnityEngine;
 
 public interface IShip
 {
-    void SetCMD(Ship.CMD cmd);
 }
