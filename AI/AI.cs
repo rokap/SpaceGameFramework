@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-[System.Serializable]
 public partial class AI
 {
     public partial class Behaviour
@@ -12,7 +11,6 @@ public partial class AI
     }
 
     IBehaviour behaviour;
-    public Entity target;
 
     public void ChangeBehaviour(IBehaviour newBehaviour)
     {
