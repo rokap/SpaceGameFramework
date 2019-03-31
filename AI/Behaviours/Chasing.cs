@@ -22,6 +22,11 @@ public partial class AI
             {
                 Debug.Log("Ending " + this.GetType() + " Behaviour");
             }
+
+            public void FixedUpdate()
+            {
+                throw new System.NotImplementedException();
+            }
         }       
     }
 }

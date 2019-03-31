@@ -6,22 +6,102 @@ public partial class AI
     {
         public class Flying : Behaviour, IBehaviour
         {
-            public Flying(Entity owner) { this.owner = owner; }
+            private Vector3 position;
+            public float decelDist = 10;
+            Vector3 currentMovementVector;
+            float velocity;
+            private float targetDistance;
+            private float stoppingDistance = 5;
+            private bool turn;
+            private float avoidanceDist = 50;
+
+            public Flying(Entity owner, Vector3 pos) { this.owner = owner; this.position = pos; }
 
             public void Start()
             {
                 Debug.Log("Starting " + this.GetType() + " Behaviour");
+
+                Ship ship = (Ship)owner;
+                velocity = ship.maxthrust;
             }
 
             public void Update()
             {
-                Debug.Log("Updating " + this.GetType() + " Behaviour");
+                Debug.Log(turn);
+                Ship ship = (Ship)owner;
+
+                Vector3 targetDir = position - ship.transform.position;
+                // The step size is equal to speed times frame time.
+                float step = ship.speed * Time.deltaTime;
+                Vector3 newDir = Vector3.RotateTowards(ship.transform.forward, targetDir, step, 0.0f);
+                if (turn)
+                {
+                    ship.transform.rotation = Quaternion.LookRotation(newDir);
+                }
+
+                Debug.DrawRay(ship.transform.position, newDir, Color.red);
+                //Debug.DrawLine(ship.transform.position, position, Color.blue);
+
+                if (Vector3.Distance(ship.transform.position, position) <= 0.5)
+                {
+                    ship.computer.SetCMD(Computer.CMD.FLYTO);
+                }
+
+
+            }
+            public void FixedUpdate()
+            {
+                Rigidbody rb = owner.GetComponent<Rigidbody>();
+                float dist = Vector3.Distance(owner.transform.position, position);
+                rb.AddRelativeForce(Vector3.forward * Mathf.Clamp(dist / ((Ship)owner).acceleration, 0, ((Ship)owner).maxthrust));
+
+                Vector3 dir = owner.transform.TransformDirection(Vector3.forward + Vector3.right / 2);
+                Debug.DrawRay(owner.transform.position, dir * avoidanceDist);
+                if (Physics.Raycast(owner.transform.position, dir, avoidanceDist))
+                {
+                    rb.AddRelativeForce(Vector3.left* ((Ship)owner).maxthrust);
+                    turn = false;
+                }
+                else
+                    turn = true;
+                dir = owner.transform.TransformDirection(Vector3.forward + Vector3.left/2);
+                Debug.DrawRay(owner.transform.position, dir * avoidanceDist);
+                if (Physics.Raycast(owner.transform.position, dir, avoidanceDist))
+                {
+                    rb.AddRelativeForce(Vector3.right * ((Ship)owner).maxthrust);
+                    turn = false;
+                }
+                else
+                    turn = true;
+                dir = owner.transform.TransformDirection(Vector3.forward + Vector3.up / 2);
+                Debug.DrawRay(owner.transform.position, dir * avoidanceDist);
+                if (Physics.Raycast(owner.transform.position, dir, avoidanceDist))
+                {
+                    rb.AddRelativeForce(Vector3.down * ((Ship)owner).maxthrust);
+                    turn = false;
+                }
+                else
+                    turn = true;
+                dir = owner.transform.TransformDirection(Vector3.forward + Vector3.down / 2);
+                Debug.DrawRay(owner.transform.position, dir * avoidanceDist);
+                if (Physics.Raycast(owner.transform.position, dir, avoidanceDist))
+                {
+                    rb.AddRelativeForce(Vector3.up * ((Ship)owner).maxthrust);
+                    turn = false;
+                }
+                else
+                    turn = true;
+            }
+
+            private float GetCurrentStoppingDistance(float velocity, float accelerationPossible)
+            {
+                return (velocity / ((Ship)owner).acceleration) * velocity * 0.5f;
             }
 
             public void End()
             {
                 Debug.Log("Ending " + this.GetType() + " Behaviour");
             }
-        }       
+        }
     }
 }

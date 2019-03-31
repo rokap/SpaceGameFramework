@@ -26,4 +26,10 @@ public partial class AI
         if (behaviour != null) behaviour.Update();
     }
 
+    public void FixedUpdate()
+    {
+        if (behaviour != null) behaviour.FixedUpdate();
+    }
+    
+
 }

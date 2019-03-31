@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Entity : MonoBehaviour, IEntity { }
+public class Entity : MonoBehaviour, IEntity
+{
+}

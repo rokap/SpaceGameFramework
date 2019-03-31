@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,11 +19,25 @@ public class Computer
         PATROL,
         PROTECT
     }
+
     public CMD cmd = CMD.IDLE;
+    public List<Software> softwares = new List<Software>();
     public List<Entity> targets = new List<Entity>();
+
     private Ship ship;
 
     public Computer(Ship ship) { this.ship = ship; }
+
+    public void Boot()
+    {
+        Debug.Log(ship.name + " Computer Booting.");
+        SetCMD(CMD.FLYTO);
+        
+    }
+
+    public void Update()
+    {
+    }
 
     private void ProcessCmd()
     {
@@ -42,6 +56,10 @@ public class Computer
             case CMD.WARP:
                 break;
             case CMD.FLYTO:
+               int x = Random.Range(-150, 150);
+               int y = Random.Range(-150, 150);
+               int z = Random.Range(-150, 150);
+                ship.ai.ChangeBehaviour(new AI.Behaviour.Flying(ship, new Vector3(x, y, z)));
                 break;
             case CMD.PATROL:
                 break;
@@ -58,9 +76,12 @@ public class Computer
         Debug.Log("Set Ship Command: " + cmd);
         this.cmd = cmd;
         ProcessCmd();
+
     }
+
     public void AddTarget(Entity target)
     {
         targets.Add(target);
     }
+
 }
