@@ -1,31 +1,33 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
-
-public class Ship : Entity, IShip
+namespace Entities
 {
-   
-    public AI ai = new AI();
-    public Computer computer;
-    public float speed;
-    public int acceleration;
-    public int maxthrust;
+    public class Ship : Entity, IShip
+    {
 
-    // Use this for initialization
-    void Start()
-    {
-        computer = new Computer(this);
-        computer.Boot();
-    }
+        public AI ai = new AI();
+        public Computer computer;
+        public float speed;
+        public int acceleration;
+        public int maxthrust;
 
-    // Update is called once per frame
-    void Update()
-    {
-        ai.Update();
-        computer.Update();
-    }
-    private void FixedUpdate()
-    {
-        ai.FixedUpdate();
+        // Use this for initialization
+        void Start()
+        {
+            computer = new Computer(this);
+            computer.Boot();
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            ai.Update();
+            computer.Update();
+        }
+        private void FixedUpdate()
+        {
+            ai.FixedUpdate();
+        }
     }
 }

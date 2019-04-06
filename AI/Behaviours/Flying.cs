@@ -21,14 +21,14 @@ public partial class AI
             {
                 Debug.Log("Starting " + this.GetType() + " Behaviour");
 
-                Ship ship = (Ship)owner;
+                Entities.Ship ship = (Entities.Ship)owner;
                 velocity = ship.maxthrust;
             }
 
             public void Update()
             {
                 Debug.Log(turn);
-                Ship ship = (Ship)owner;
+                Entities.Ship ship = (Entities.Ship)owner;
 
                 Vector3 targetDir = position - ship.transform.position;
                 // The step size is equal to speed times frame time.
@@ -44,7 +44,7 @@ public partial class AI
 
                 if (Vector3.Distance(ship.transform.position, position) <= 0.5)
                 {
-                    ship.computer.SetCMD(Computer.CMD.FLYTO);
+                    ship.computer.SetCMD(Entities.Computer.CMD.FLYTO);
                 }
 
 
@@ -53,13 +53,13 @@ public partial class AI
             {
                 Rigidbody rb = owner.GetComponent<Rigidbody>();
                 float dist = Vector3.Distance(owner.transform.position, position);
-                rb.AddRelativeForce(Vector3.forward * Mathf.Clamp(dist / ((Ship)owner).acceleration, 0, ((Ship)owner).maxthrust));
+                rb.AddRelativeForce(Vector3.forward * Mathf.Clamp(dist / ((Entities.Ship)owner).acceleration, 0, ((Entities.Ship)owner).maxthrust));
 
                 Vector3 dir = owner.transform.TransformDirection(Vector3.forward + Vector3.right / 2);
                 Debug.DrawRay(owner.transform.position, dir * avoidanceDist);
                 if (Physics.Raycast(owner.transform.position, dir, avoidanceDist))
                 {
-                    rb.AddRelativeForce(Vector3.left* ((Ship)owner).maxthrust);
+                    rb.AddRelativeForce(Vector3.left* ((Entities.Ship)owner).maxthrust);
                     turn = false;
                 }
                 else
@@ -68,7 +68,7 @@ public partial class AI
                 Debug.DrawRay(owner.transform.position, dir * avoidanceDist);
                 if (Physics.Raycast(owner.transform.position, dir, avoidanceDist))
                 {
-                    rb.AddRelativeForce(Vector3.right * ((Ship)owner).maxthrust);
+                    rb.AddRelativeForce(Vector3.right * ((Entities.Ship)owner).maxthrust);
                     turn = false;
                 }
                 else
@@ -77,7 +77,7 @@ public partial class AI
                 Debug.DrawRay(owner.transform.position, dir * avoidanceDist);
                 if (Physics.Raycast(owner.transform.position, dir, avoidanceDist))
                 {
-                    rb.AddRelativeForce(Vector3.down * ((Ship)owner).maxthrust);
+                    rb.AddRelativeForce(Vector3.down * ((Entities.Ship)owner).maxthrust);
                     turn = false;
                 }
                 else
@@ -86,7 +86,7 @@ public partial class AI
                 Debug.DrawRay(owner.transform.position, dir * avoidanceDist);
                 if (Physics.Raycast(owner.transform.position, dir, avoidanceDist))
                 {
-                    rb.AddRelativeForce(Vector3.up * ((Ship)owner).maxthrust);
+                    rb.AddRelativeForce(Vector3.up * ((Entities.Ship)owner).maxthrust);
                     turn = false;
                 }
                 else
@@ -95,7 +95,7 @@ public partial class AI
 
             private float GetCurrentStoppingDistance(float velocity, float accelerationPossible)
             {
-                return (velocity / ((Ship)owner).acceleration) * velocity * 0.5f;
+                return (velocity / ((Entities.Ship)owner).acceleration) * velocity * 0.5f;
             }
 
             public void End()
